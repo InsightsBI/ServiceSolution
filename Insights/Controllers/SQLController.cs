@@ -23,7 +23,7 @@ namespace Insights.Controllers
                 return "Test Connection Succeeded";
             }else
             {
-                return "fail";
+                return "Test Connection Failed";
             }
             
         }
