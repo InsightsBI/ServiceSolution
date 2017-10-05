@@ -1,0 +1,732 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="insightbiModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountID" />
+          </Key>
+          <Property Name="AccountID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountName" Type="varchar" MaxLength="255" />
+          <Property Name="LongName" Type="varchar" MaxLength="255" />
+          <Property Name="ShortName" Type="varchar" MaxLength="255" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="UpdatedDate" Type="date" />
+          <Property Name="SubscriptionType" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Connection">
+          <Key>
+            <PropertyRef Name="ConnectionId" />
+          </Key>
+          <Property Name="ConnectionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConnectionName" Type="varchar" MaxLength="255" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="UpdatedDate" Type="date" />
+        </EntityType>
+        <EntityType Name="ConnectionUserFactless">
+          <Key>
+            <PropertyRef Name="ConnUserId" />
+          </Key>
+          <Property Name="ConnUserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConnectionID" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>
+        <EntityType Name="Dashboard">
+          <Key>
+            <PropertyRef Name="DashboardId" />
+          </Key>
+          <Property Name="DashboardId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DashboardName" Type="varchar" MaxLength="255" />
+          <Property Name="UserId" Type="int" />
+        </EntityType>
+        <EntityType Name="DashboardReportFactless">
+          <Key>
+            <PropertyRef Name="DashboardReportID" />
+          </Key>
+          <Property Name="DashboardReportID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DashboardId" Type="int" />
+        </EntityType>
+        <EntityType Name="lu_chart">
+          <Key>
+            <PropertyRef Name="ChartId" />
+          </Key>
+          <Property Name="ChartId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChartName" Type="varchar" MaxLength="255" />
+          <Property Name="CreatedDate" Type="date" />
+        </EntityType>
+        <EntityType Name="lu_role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChartId" Type="int" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="ConnectionID" Type="int" />
+          <Property Name="Query" Type="varchar(max)" />
+          <Property Name="CreatedDate" Type="date" />
+          <Property Name="UpdatedDate" Type="date" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="255" />
+          <Property Name="LastName" Type="varchar" MaxLength="255" />
+          <Property Name="UserName" Type="varchar" MaxLength="255" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+          <Property Name="CreatedDate" Type="varchar" MaxLength="255" />
+          <Property Name="UpdatedDate" Type="varchar" MaxLength="255" />
+          <Property Name="IsActive" Type="int" />
+          <Property Name="RoleId" Type="int" />
+        </EntityType>
+        <EntityType Name="UserReport">
+          <Key>
+            <PropertyRef Name="UserReportID" />
+          </Key>
+          <Property Name="UserReportID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportID" Type="int" />
+          <Property Name="DashboardId" Type="int" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>
+        <Association Name="FK__Connectio__Conne__2E1BDC42">
+          <End Role="Connection" Type="Self.Connection" Multiplicity="0..1" />
+          <End Role="ConnectionUserFactless" Type="Self.ConnectionUserFactless" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Connection">
+              <PropertyRef Name="ConnectionId" />
+            </Principal>
+            <Dependent Role="ConnectionUserFactless">
+              <PropertyRef Name="ConnectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Connectio__UserI__2F10007B">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="ConnectionUserFactless" Type="Self.ConnectionUserFactless" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="ConnectionUserFactless">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dashboard__Dashb__34C8D9D1">
+          <End Role="Dashboard" Type="Self.Dashboard" Multiplicity="0..1" />
+          <End Role="DashboardReportFactless" Type="Self.DashboardReportFactless" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dashboard">
+              <PropertyRef Name="DashboardId" />
+            </Principal>
+            <Dependent Role="DashboardReportFactless">
+              <PropertyRef Name="DashboardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dashboard__UserI__31EC6D26">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Dashboard" Type="Self.Dashboard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Dashboard">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Report__ChartId__37A5467C">
+          <End Role="lu_chart" Type="Self.lu_chart" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lu_chart">
+              <PropertyRef Name="ChartId" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ChartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Report__Connecti__398D8EEE">
+          <End Role="Connection" Type="Self.Connection" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Connection">
+              <PropertyRef Name="ConnectionId" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ConnectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Report__UserId__38996AB5">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User__RoleId__276EDEB3">
+          <End Role="lu_role" Type="Self.lu_role" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lu_role">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRepor__Dashb__3D5E1FD2">
+          <End Role="Dashboard" Type="Self.Dashboard" Multiplicity="0..1" />
+          <End Role="UserReport" Type="Self.UserReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dashboard">
+              <PropertyRef Name="DashboardId" />
+            </Principal>
+            <Dependent Role="UserReport">
+              <PropertyRef Name="DashboardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRepor__Repor__3C69FB99">
+          <End Role="Report" Type="Self.Report" Multiplicity="0..1" />
+          <End Role="UserReport" Type="Self.UserReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportId" />
+            </Principal>
+            <Dependent Role="UserReport">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRepor__UserI__3E52440B">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="UserReport" Type="Self.UserReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserReport">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="insightbiModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Connection" EntityType="Self.Connection" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConnectionUserFactless" EntityType="Self.ConnectionUserFactless" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dashboard" EntityType="Self.Dashboard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DashboardReportFactless" EntityType="Self.DashboardReportFactless" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lu_chart" EntityType="Self.lu_chart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lu_role" EntityType="Self.lu_role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserReport" EntityType="Self.UserReport" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Connectio__Conne__2E1BDC42" Association="Self.FK__Connectio__Conne__2E1BDC42">
+            <End Role="Connection" EntitySet="Connection" />
+            <End Role="ConnectionUserFactless" EntitySet="ConnectionUserFactless" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Connectio__UserI__2F10007B" Association="Self.FK__Connectio__UserI__2F10007B">
+            <End Role="User" EntitySet="User" />
+            <End Role="ConnectionUserFactless" EntitySet="ConnectionUserFactless" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dashboard__Dashb__34C8D9D1" Association="Self.FK__Dashboard__Dashb__34C8D9D1">
+            <End Role="Dashboard" EntitySet="Dashboard" />
+            <End Role="DashboardReportFactless" EntitySet="DashboardReportFactless" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dashboard__UserI__31EC6D26" Association="Self.FK__Dashboard__UserI__31EC6D26">
+            <End Role="User" EntitySet="User" />
+            <End Role="Dashboard" EntitySet="Dashboard" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Report__ChartId__37A5467C" Association="Self.FK__Report__ChartId__37A5467C">
+            <End Role="lu_chart" EntitySet="lu_chart" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Report__Connecti__398D8EEE" Association="Self.FK__Report__Connecti__398D8EEE">
+            <End Role="Connection" EntitySet="Connection" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Report__UserId__38996AB5" Association="Self.FK__Report__UserId__38996AB5">
+            <End Role="User" EntitySet="User" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__RoleId__276EDEB3" Association="Self.FK__User__RoleId__276EDEB3">
+            <End Role="lu_role" EntitySet="lu_role" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRepor__Dashb__3D5E1FD2" Association="Self.FK__UserRepor__Dashb__3D5E1FD2">
+            <End Role="Dashboard" EntitySet="Dashboard" />
+            <End Role="UserReport" EntitySet="UserReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRepor__Repor__3C69FB99" Association="Self.FK__UserRepor__Repor__3C69FB99">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="UserReport" EntitySet="UserReport" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRepor__UserI__3E52440B" Association="Self.FK__UserRepor__UserI__3E52440B">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserReport" EntitySet="UserReport" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="insightbiModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountID" />
+          </Key>
+          <Property Name="AccountID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LongName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ShortName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="0" />
+          <Property Name="SubscriptionType" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Connection">
+          <Key>
+            <PropertyRef Name="ConnectionId" />
+          </Key>
+          <Property Name="ConnectionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConnectionName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="ConnectionUserFactlesses" Relationship="Self.FK__Connectio__Conne__2E1BDC42" FromRole="Connection" ToRole="ConnectionUserFactless" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK__Report__Connecti__398D8EEE" FromRole="Connection" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="ConnectionUserFactless">
+          <Key>
+            <PropertyRef Name="ConnUserId" />
+          </Key>
+          <Property Name="ConnUserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ConnectionID" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <NavigationProperty Name="Connection" Relationship="Self.FK__Connectio__Conne__2E1BDC42" FromRole="ConnectionUserFactless" ToRole="Connection" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Connectio__UserI__2F10007B" FromRole="ConnectionUserFactless" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Dashboard">
+          <Key>
+            <PropertyRef Name="DashboardId" />
+          </Key>
+          <Property Name="DashboardId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DashboardName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UserId" Type="Int32" />
+          <NavigationProperty Name="DashboardReportFactlesses" Relationship="Self.FK__Dashboard__Dashb__34C8D9D1" FromRole="Dashboard" ToRole="DashboardReportFactless" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Dashboard__UserI__31EC6D26" FromRole="Dashboard" ToRole="User" />
+          <NavigationProperty Name="UserReports" Relationship="Self.FK__UserRepor__Dashb__3D5E1FD2" FromRole="Dashboard" ToRole="UserReport" />
+        </EntityType>
+        <EntityType Name="DashboardReportFactless">
+          <Key>
+            <PropertyRef Name="DashboardReportID" />
+          </Key>
+          <Property Name="DashboardReportID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DashboardId" Type="Int32" />
+          <NavigationProperty Name="Dashboard" Relationship="Self.FK__Dashboard__Dashb__34C8D9D1" FromRole="DashboardReportFactless" ToRole="Dashboard" />
+        </EntityType>
+        <EntityType Name="lu_chart">
+          <Key>
+            <PropertyRef Name="ChartId" />
+          </Key>
+          <Property Name="ChartId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ChartName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK__Report__ChartId__37A5467C" FromRole="lu_chart" ToRole="Report" />
+        </EntityType>
+        <EntityType Name="lu_role">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__User__RoleId__276EDEB3" FromRole="lu_role" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ChartId" Type="Int32" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="ConnectionID" Type="Int32" />
+          <Property Name="Query" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Connection" Relationship="Self.FK__Report__Connecti__398D8EEE" FromRole="Report" ToRole="Connection" />
+          <NavigationProperty Name="lu_chart" Relationship="Self.FK__Report__ChartId__37A5467C" FromRole="Report" ToRole="lu_chart" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Report__UserId__38996AB5" FromRole="Report" ToRole="User" />
+          <NavigationProperty Name="UserReports" Relationship="Self.FK__UserRepor__Repor__3C69FB99" FromRole="Report" ToRole="UserReport" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UserName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedDate" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedDate" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Int32" />
+          <Property Name="RoleId" Type="Int32" />
+          <NavigationProperty Name="ConnectionUserFactlesses" Relationship="Self.FK__Connectio__UserI__2F10007B" FromRole="User" ToRole="ConnectionUserFactless" />
+          <NavigationProperty Name="Dashboards" Relationship="Self.FK__Dashboard__UserI__31EC6D26" FromRole="User" ToRole="Dashboard" />
+          <NavigationProperty Name="lu_role" Relationship="Self.FK__User__RoleId__276EDEB3" FromRole="User" ToRole="lu_role" />
+          <NavigationProperty Name="Reports" Relationship="Self.FK__Report__UserId__38996AB5" FromRole="User" ToRole="Report" />
+          <NavigationProperty Name="UserReports" Relationship="Self.FK__UserRepor__UserI__3E52440B" FromRole="User" ToRole="UserReport" />
+        </EntityType>
+        <EntityType Name="UserReport">
+          <Key>
+            <PropertyRef Name="UserReportID" />
+          </Key>
+          <Property Name="UserReportID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportID" Type="Int32" />
+          <Property Name="DashboardId" Type="Int32" />
+          <Property Name="UserID" Type="Int32" />
+          <NavigationProperty Name="Dashboard" Relationship="Self.FK__UserRepor__Dashb__3D5E1FD2" FromRole="UserReport" ToRole="Dashboard" />
+          <NavigationProperty Name="Report" Relationship="Self.FK__UserRepor__Repor__3C69FB99" FromRole="UserReport" ToRole="Report" />
+          <NavigationProperty Name="User" Relationship="Self.FK__UserRepor__UserI__3E52440B" FromRole="UserReport" ToRole="User" />
+        </EntityType>
+        <Association Name="FK__Connectio__Conne__2E1BDC42">
+          <End Role="Connection" Type="Self.Connection" Multiplicity="0..1" />
+          <End Role="ConnectionUserFactless" Type="Self.ConnectionUserFactless" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Connection">
+              <PropertyRef Name="ConnectionId" />
+            </Principal>
+            <Dependent Role="ConnectionUserFactless">
+              <PropertyRef Name="ConnectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Report__Connecti__398D8EEE">
+          <End Role="Connection" Type="Self.Connection" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Connection">
+              <PropertyRef Name="ConnectionId" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ConnectionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Connectio__UserI__2F10007B">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="ConnectionUserFactless" Type="Self.ConnectionUserFactless" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="ConnectionUserFactless">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dashboard__Dashb__34C8D9D1">
+          <End Role="Dashboard" Type="Self.Dashboard" Multiplicity="0..1" />
+          <End Role="DashboardReportFactless" Type="Self.DashboardReportFactless" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dashboard">
+              <PropertyRef Name="DashboardId" />
+            </Principal>
+            <Dependent Role="DashboardReportFactless">
+              <PropertyRef Name="DashboardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Dashboard__UserI__31EC6D26">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Dashboard" Type="Self.Dashboard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Dashboard">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRepor__Dashb__3D5E1FD2">
+          <End Role="Dashboard" Type="Self.Dashboard" Multiplicity="0..1" />
+          <End Role="UserReport" Type="Self.UserReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dashboard">
+              <PropertyRef Name="DashboardId" />
+            </Principal>
+            <Dependent Role="UserReport">
+              <PropertyRef Name="DashboardId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Report__ChartId__37A5467C">
+          <End Role="lu_chart" Type="Self.lu_chart" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lu_chart">
+              <PropertyRef Name="ChartId" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ChartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User__RoleId__276EDEB3">
+          <End Role="lu_role" Type="Self.lu_role" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="lu_role">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Report__UserId__38996AB5">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRepor__Repor__3C69FB99">
+          <End Role="Report" Type="Self.Report" Multiplicity="0..1" />
+          <End Role="UserReport" Type="Self.UserReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="ReportId" />
+            </Principal>
+            <Dependent Role="UserReport">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserRepor__UserI__3E52440B">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="UserReport" Type="Self.UserReport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="UserReport">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="insightbiModelEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Account" />
+          <EntitySet Name="Connections" EntityType="Self.Connection" />
+          <EntitySet Name="ConnectionUserFactlesses" EntityType="Self.ConnectionUserFactless" />
+          <EntitySet Name="Dashboards" EntityType="Self.Dashboard" />
+          <EntitySet Name="DashboardReportFactlesses" EntityType="Self.DashboardReportFactless" />
+          <EntitySet Name="lu_chart" EntityType="Self.lu_chart" />
+          <EntitySet Name="lu_role" EntityType="Self.lu_role" />
+          <EntitySet Name="Reports" EntityType="Self.Report" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="UserReports" EntityType="Self.UserReport" />
+          <AssociationSet Name="FK__Connectio__Conne__2E1BDC42" Association="Self.FK__Connectio__Conne__2E1BDC42">
+            <End Role="Connection" EntitySet="Connections" />
+            <End Role="ConnectionUserFactless" EntitySet="ConnectionUserFactlesses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Report__Connecti__398D8EEE" Association="Self.FK__Report__Connecti__398D8EEE">
+            <End Role="Connection" EntitySet="Connections" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Connectio__UserI__2F10007B" Association="Self.FK__Connectio__UserI__2F10007B">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ConnectionUserFactless" EntitySet="ConnectionUserFactlesses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dashboard__Dashb__34C8D9D1" Association="Self.FK__Dashboard__Dashb__34C8D9D1">
+            <End Role="Dashboard" EntitySet="Dashboards" />
+            <End Role="DashboardReportFactless" EntitySet="DashboardReportFactlesses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Dashboard__UserI__31EC6D26" Association="Self.FK__Dashboard__UserI__31EC6D26">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Dashboard" EntitySet="Dashboards" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRepor__Dashb__3D5E1FD2" Association="Self.FK__UserRepor__Dashb__3D5E1FD2">
+            <End Role="Dashboard" EntitySet="Dashboards" />
+            <End Role="UserReport" EntitySet="UserReports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Report__ChartId__37A5467C" Association="Self.FK__Report__ChartId__37A5467C">
+            <End Role="lu_chart" EntitySet="lu_chart" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__RoleId__276EDEB3" Association="Self.FK__User__RoleId__276EDEB3">
+            <End Role="lu_role" EntitySet="lu_role" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Report__UserId__38996AB5" Association="Self.FK__Report__UserId__38996AB5">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRepor__Repor__3C69FB99" Association="Self.FK__UserRepor__Repor__3C69FB99">
+            <End Role="Report" EntitySet="Reports" />
+            <End Role="UserReport" EntitySet="UserReports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserRepor__UserI__3E52440B" Association="Self.FK__UserRepor__UserI__3E52440B">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserReport" EntitySet="UserReports" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="insightbiModelStoreContainer" CdmEntityContainer="insightbiModelEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="insightbiModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="LongName" ColumnName="LongName" />
+                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="SubscriptionType" ColumnName="SubscriptionType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Connections">
+            <EntityTypeMapping TypeName="insightbiModel.Connection">
+              <MappingFragment StoreEntitySet="Connection">
+                <ScalarProperty Name="ConnectionId" ColumnName="ConnectionId" />
+                <ScalarProperty Name="ConnectionName" ColumnName="ConnectionName" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ConnectionUserFactlesses">
+            <EntityTypeMapping TypeName="insightbiModel.ConnectionUserFactless">
+              <MappingFragment StoreEntitySet="ConnectionUserFactless">
+                <ScalarProperty Name="ConnUserId" ColumnName="ConnUserId" />
+                <ScalarProperty Name="ConnectionID" ColumnName="ConnectionID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dashboards">
+            <EntityTypeMapping TypeName="insightbiModel.Dashboard">
+              <MappingFragment StoreEntitySet="Dashboard">
+                <ScalarProperty Name="DashboardId" ColumnName="DashboardId" />
+                <ScalarProperty Name="DashboardName" ColumnName="DashboardName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DashboardReportFactlesses">
+            <EntityTypeMapping TypeName="insightbiModel.DashboardReportFactless">
+              <MappingFragment StoreEntitySet="DashboardReportFactless">
+                <ScalarProperty Name="DashboardReportID" ColumnName="DashboardReportID" />
+                <ScalarProperty Name="DashboardId" ColumnName="DashboardId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lu_chart">
+            <EntityTypeMapping TypeName="insightbiModel.lu_chart">
+              <MappingFragment StoreEntitySet="lu_chart">
+                <ScalarProperty Name="ChartId" ColumnName="ChartId" />
+                <ScalarProperty Name="ChartName" ColumnName="ChartName" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="lu_role">
+            <EntityTypeMapping TypeName="insightbiModel.lu_role">
+              <MappingFragment StoreEntitySet="lu_role">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="insightbiModel.Report">
+              <MappingFragment StoreEntitySet="Report">
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="ChartId" ColumnName="ChartId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ConnectionID" ColumnName="ConnectionID" />
+                <ScalarProperty Name="Query" ColumnName="Query" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="insightbiModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserReports">
+            <EntityTypeMapping TypeName="insightbiModel.UserReport">
+              <MappingFragment StoreEntitySet="UserReport">
+                <ScalarProperty Name="UserReportID" ColumnName="UserReportID" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="DashboardId" ColumnName="DashboardId" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
